@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.mogolinc.glide.androidsample"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        jackOptions {
+            enabled true
+        }
+
+        multiDexEnabled = true
+        dexOptions {
+            javaMaxHeapSize "6g"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    /* Faxterxml libraries all have the same LICENSE meta-inf that conflict. Pick the first, since they are all the same. */
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE'
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name "releases"
+        url "https://maven.mogolinc.com/releases"
+    }
+    maven {
+        name "snapshots"
+        url "https://maven.mogolinc.com/snapshots"
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.google.android.gms:play-services:10.2.0'
+    compile 'com.mogolinc:glide-cloudsdk:0.9.5-snapshot-develop-007'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.amazonaws:aws-java-sdk-core:1.11.+'
+    compile 'com.amazonaws:aws-android-sdk-apigateway-core:2.3.1+'
+    compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.2+'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.3.9'
+}

@@ -14,7 +14,7 @@ Glide can either provide raw data, or route prediction and tracking.
 
 To retrieve a set of events in a bounding box, create a RouteManager and use GetAtmsInRegion:
 
-`
+```java
 RouteManager manager = new RouteManager(apiKey, getApplicationContext());
 LocationBounds bounds = new LocationBounds();
 Location a = new Location("test");
@@ -24,7 +24,7 @@ a.setLongitude(-122.5);
 b.setLatitude(45.3);
 b.setLongitude(-122.3);
 List<AtmsObj> events = manager.GetAtmsInRegion(bounds);
-`
+```
 
 Each AtmsObj has geometry describing a polygon (if it is a zone, checked by testing if getZone() is null), or a line, and relevant information about the event.
 
