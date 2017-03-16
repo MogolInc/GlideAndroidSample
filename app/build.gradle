@@ -57,7 +57,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.google.android.gms:play-services:10.2.0'
-    compile 'com.mogolinc:glide-cloudsdk:0.9.5-snapshot-develop-007'
+    compile 'com.mogolinc:glide-cloudsdk:1.0.0-alpha3'
     testCompile 'junit:junit:4.12'
 
     compile 'com.amazonaws:aws-java-sdk-core:1.11.+'

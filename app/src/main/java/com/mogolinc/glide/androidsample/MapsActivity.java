@@ -41,14 +41,13 @@ import com.mogolinc.glide.apisdk.model.AtmsObj;
 import com.mogolinc.glide.cloudsdk.GlideLocation;
 import com.mogolinc.glide.cloudsdk.Leg;
 import com.mogolinc.glide.cloudsdk.RouteManager;
-import com.mogolinc.glide.cloudsdk.utils.Atms;
-import com.mogolinc.glide.cloudsdk.utils.Conditions;
-import com.mogolinc.glide.cloudsdk.utils.ITrackingUpdate;
-import com.mogolinc.glide.cloudsdk.utils.LocationBounds;
-import com.mogolinc.glide.cloudsdk.utils.PredictionState;
-import com.mogolinc.glide.cloudsdk.utils.exceptions.ApiException;
-import com.mogolinc.glide.cloudsdk.utils.exceptions.ChildNotFoundException;
-import com.mogolinc.glide.cloudsdk.utils.exceptions.OffRouteException;
+import com.mogolinc.glide.cloudsdk.Atms;
+import com.mogolinc.glide.cloudsdk.Conditions;
+import com.mogolinc.glide.cloudsdk.ITrackingUpdate;
+import com.mogolinc.glide.cloudsdk.LocationBounds;
+import com.mogolinc.glide.cloudsdk.PredictionState;
+import com.mogolinc.glide.cloudsdk.ApiException;
+import com.mogolinc.glide.cloudsdk.OffRouteException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -151,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     class fetchRegionAsyncTask extends AsyncTask {
-        ArrayList<Atms> atmsObjs;
+        List<Atms> atmsObjs;
         @Override
         protected Object doInBackground(Object[] params) {
             LocationBounds bounds = new LocationBounds();
@@ -300,7 +299,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (location != null) {
             predictionTask = new PredictionAsyncTask();
-            predictionTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
+            predictionTask.executeOnExecutor(THREAD_POOL_EXECUTOR, location);
             onLocationChanged(location);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14));
 
@@ -350,10 +349,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return true;
                 } catch (ApiException e) {
                     error = e.getMessage();
-                    e.printStackTrace();
-                } catch (ChildNotFoundException e) {
-                    error = e.getMessage();
-                    Log.d("com.mogolinc", "Prediction failed: " + error);
                     e.printStackTrace();
                 }
             }
@@ -467,7 +462,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onOffRouteUpdate(GlideLocation glideLocation) {
-        Log.d("com.mogolinc", "Off route at " + glideLocation.toString() + " legs: " + (mRouteManager.Legs != null ? Integer.toString(mRouteManager.Legs.size()) : "null"));
+        Log.d("com.mogolinc", "Off route at " + glideLocation.toString() + " legs: " + (mRouteManager.getLegs() != null ? Integer.toString(mRouteManager.getLegs().size()) : "null"));
         runOnUiThread(new Runnable() {
             public void run() {
                 if(predictionLine != null)
@@ -481,16 +476,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(predictionTask == null) {
             predictionTask = new PredictionAsyncTask();
-            predictionTask.executeOnExecutor(THREAD_POOL_EXECUTOR);
+            predictionTask.executeOnExecutor(THREAD_POOL_EXECUTOR, glideLocation);
         }
     }
 
     Polyline predictionLine;
     private void DrawPrediction() {
         // Use the geometry from route manager to draw the predicted path.
-        List<LatLng> locs = new ArrayList<>(mRouteManager.Locations.size());
+        List<LatLng> locs = new ArrayList<>(mRouteManager.getLocations().size());
 
-        for (Location l : mRouteManager.Locations) {
+        for (Location l : mRouteManager.getLocations()) {
             locs.add(new LatLng(l.getLatitude(), l.getLongitude()));
         }
         Log.d("com.mogolinc", "Drawing prediction for " + Integer.toString(locs.size()) + " points");
