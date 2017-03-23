@@ -23,6 +23,8 @@ a.setLatitude(45.5);
 a.setLongitude(-122.5);
 b.setLatitude(45.3);
 b.setLongitude(-122.3);
+bounds.AddLocation(a);
+bounds.AddLocation(b);
 List<AtmsObj> events = manager.GetAtmsInRegion(bounds);
 ```
 
