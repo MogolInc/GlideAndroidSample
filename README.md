@@ -4,7 +4,7 @@ Sample application for the Glide Android SDK.
 # Adding the Glide Android SDK to your project
 1) Sign up for an API key at http://mogolinc.com/development.html.
 2) Add maven.mogolinc.com as a repo to your project
-3) Add glide-cloudsdk as a dependency (current version is 1.0.0-alpha3)
+3) Add glide-cloudsdk as a dependency (current version is 1.0.0-alpha5)
 
 # Using the Glide Android SDK
 
